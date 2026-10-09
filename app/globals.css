@@ -1,0 +1,389 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0e14;
+  --surface: #0e141d;
+  --raised: #141c27;
+  --foreground: #eef2f7;
+  --muted: #93a1b4;
+  --accent: #34d399;
+  --accent-bright: #6ee7b7;
+  --accent-blue: #60a5fa;
+  --edge: rgba(238, 242, 247, 0.09);
+  --edge-strong: rgba(238, 242, 247, 0.18);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-blue: var(--accent-blue);
+  --color-edge: var(--edge);
+  --color-edge-strong: var(--edge-strong);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Enables animating <details> to natural height in supporting browsers */
+  interpolate-size: allow-keywords;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 80%, transparent);
+  color: #0a0a0a;
+}
+
+/* ---- Scroll-reveal animation ------------------------------------ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px) scale(0.99);
+  filter: blur(4px);
+  transition:
+    opacity 0.7s ease,
+    filter 0.7s ease,
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* ---- Live hero background ----------------------------------------- */
+
+.hero-image {
+  animation: kenburns 38s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes kenburns {
+  0% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.16) translate3d(-1.5%, 2%, 0);
+  }
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.aurora-a {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 32%, transparent),
+    transparent 70%
+  );
+  animation: aurora-drift 24s ease-in-out infinite alternate;
+}
+
+.aurora-b {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent-blue) 28%, transparent),
+    transparent 70%
+  );
+  animation: aurora-drift 30s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-8%, -5%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(8%, 6%, 0) scale(1.2);
+  }
+}
+
+/* ---- Animated gradient headline text ------------------------------ */
+
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    var(--accent-bright) 28%,
+    var(--accent-blue) 55%,
+    var(--accent-bright) 78%,
+    var(--accent) 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-pan 7s linear infinite;
+}
+
+@keyframes shimmer-pan {
+  to {
+    background-position: 220% center;
+  }
+}
+
+/* ---- Floating hero particles -------------------------------------- */
+
+.particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--accent);
+  opacity: 0;
+  animation: particle-float var(--particle-duration, 14s) ease-in-out infinite;
+  animation-delay: var(--particle-delay, 0s);
+  pointer-events: none;
+}
+
+.particle--blue {
+  background: var(--accent-blue);
+}
+
+@keyframes particle-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.6);
+  }
+  15% {
+    opacity: var(--particle-opacity, 0.5);
+  }
+  85% {
+    opacity: var(--particle-opacity, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--particle-x, 20px), -110px, 0) scale(1.1);
+  }
+}
+
+/* ---- Scroll cue --------------------------------------------------- */
+
+.scroll-cue {
+  animation: cue-bounce 2.2s ease-in-out infinite;
+}
+
+@keyframes cue-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.25;
+  }
+}
+
+/* ---- Industry marquee --------------------------------------------- */
+
+.marquee {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 36s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---- Spotlight cards ----------------------------------------------- */
+
+.spotlight-card {
+  position: relative;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.spotlight-card:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--edge));
+  box-shadow:
+    0 18px 45px -22px rgba(0, 0, 0, 0.65),
+    0 0 36px -18px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* ---- Button shine sweep -------------------------------------------- */
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  transform: skewX(-22deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.btn-shine:hover::after {
+  left: 130%;
+}
+
+/* ---- Smooth FAQ accordion ------------------------------------------ */
+
+details.faq-item::details-content {
+  opacity: 0;
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    content-visibility 0.4s allow-discrete,
+    opacity 0.4s ease,
+    block-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+details.faq-item[open]::details-content {
+  opacity: 1;
+  block-size: auto;
+}
+
+/* ---- Pulsing badge dot --------------------------------------------- */
+
+.pulse-dot {
+  position: relative;
+}
+
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* ---- Reduced motion ------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .hero-image,
+  .aurora-blob,
+  .particle,
+  .scroll-cue,
+  .marquee-track,
+  .text-shimmer,
+  .pulse-dot::after {
+    animation: none;
+  }
+  .particle {
+    opacity: 0.3;
+  }
+  .spotlight-card,
+  .spotlight-card::before,
+  .btn-shine::after {
+    transition: none;
+  }
+  details.faq-item::details-content {
+    transition: none;
+  }
+}
+
+/* ---- Decorative backgrounds -------------------------------------- */
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(238, 242, 247, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(238, 242, 247, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 35%, transparent 78%);
+}
+
+.glow-accent {
+  background:
+    radial-gradient(
+      ellipse 50% 40% at 38% 0%,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 66% 0%,
+      color-mix(in srgb, var(--accent-blue) 12%, transparent),
+      transparent 70%
+    );
+}
